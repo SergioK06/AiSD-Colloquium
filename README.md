@@ -365,48 +365,6 @@ function radixSort(int[] A, int l, int r, int d):
 
 Стек можно реализовывать и на массиве (стат. и дин.), и на списках
 
-Код (на списках):
-```c++
-struct Node{
-    int64_t key;
-    Node* next;
-
-    Node(int64_t _val): key(_val), next(nullptr){}
-};
-
-struct StackList {
-    Node* stack_head;
-
-    StackList(): stack_head(nullptr){}
-
-    bool is_empty() {
-        return stack_head == nullptr;
-    }
-
-    void push(int64_t _val) {
-        Node* p = new Node(_val);
-
-        if (is_empty()) {
-            stack_head = p;
-            return;
-        }
-
-        p->next = stack_head;
-        stack_head = p;
-    }
-
-    void pop() {
-        if (is_empty()) {
-            return;
-        }
-        Node* p = stack_head;
-        stack_head = stack_head->next;
-        delete p;
-    }
-
-};
-```
-
 ## <ins> 9. Очередь (Queue) </ins>
 
 Очередь — это структура данных, добавление и удаление элементов в которой
@@ -427,52 +385,64 @@ struct StackList {
 
 Очередь можно реализовывать и на массиве (стат. и дин.), и на списках
 
-Код (на списках):
-```c++
-struct Node{
-    int64_t key;
-    Node* next;
-
-    Node(int64_t _val): key(_val), next(nullptr){}
-};
-
-struct QueueList {
-    Node* queue_head;
-    Node* queue_tail;
-
-    QueueList(): queue_head(nullptr), queue_tail(nullptr){}
-
-    bool is_empty() {
-        return queue_head == nullptr;
-    }
-
-    void push(int64_t _val) {
-        Node* p = new Node(_val);
-
-        if (is_empty()) {
-            queue_tail = queue_head = p;
-            return;
-        }
-
-        queue_tail->next = p;
-        queue_tail = p;
-    }
-
-    void pop() {
-        if (is_empty()) {
-            return;
-        }
-
-        Node* p = queue_head;
-        queue_head = queue_head->next;
-
-        if (queue_head == nullptr) {
-            queue_tail = nullptr;
-        }
-        delete p;
-    }
-};
-```
-
 ## <ins> 10. Односвязный список </ins>
 
+Связный список — структура данных, состоящая из элементов, содержащих
+помимо собственных данных ссылки на следующий и/или предыдущий элемент
+списка. С помощью списков можно реализовать такие структуры данных как стек
+и очередь.
+
+Односвязный список - простейшая реализация списка, в узлах которого хранятся 
+данные и указатель на следующий элемент в списке.
+
+Базовые операции:
+- Вставка
+- Поиск
+- Удаление
+
+Код:
+```c++
+struct Node{
+    int key;
+    Node* next;
+};
+struct Node* head
+```
+
+## <ins> 11. Двусвязный список </ins>
+
+Связный список — структура данных, состоящая из элементов, содержащих
+помимо собственных данных ссылки на следующий и/или предыдущий элемент
+списка. С помощью списков можно реализовать такие структуры данных как стек
+и очередь.
+
+Двусвязный список - реализация списка, в узлах которого хранятся данные и
+указатели на предыдущий и следующий элемент списка, благодаря чему становится
+проще удалять и переставлять элементы.
+
+Базовые операции:
+- Вставка
+- Поиск
+- Удаление
+
+Код:
+```c++
+struct Node{
+    int key;
+    Node* next;
+    Node* prev;
+};
+struct Node* head
+```
+
+## <ins> 12. Циклический список </ins>
+
+Связный список — структура данных, состоящая из элементов, содержащих
+помимо собственных данных ссылки на следующий и/или предыдущий элемент
+списка. С помощью списков можно реализовать такие структуры данных как стек
+и очередь.
+
+Циклический список - одно/двусвязный список, в котором первый элемент является
+следующим для последнего элемента списка.
+
+## <ins> 13. Стек на списках  </ins>
