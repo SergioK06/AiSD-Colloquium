@@ -446,3 +446,104 @@ struct Node* head
 следующим для последнего элемента списка.
 
 ## <ins> 13. Стек на списках  </ins>
+
+Реализация стека на списках должна поддерживать функции:
+- push (добавление)
+- pop (удаление последнего элемента)
+- empty (проверка на пустоту стека)
+
+Код (реализация на односвязном списке):
+```c++
+struct Node{
+    int key;
+    Node* next;
+
+    Node(int _val): key(_val), next(nullptr){}
+};
+
+struct StackList {
+    Node* stack_head;
+
+    StackList(): stack_head(nullptr){}
+
+    bool is_empty() {
+        return stack_head == nullptr;
+    }
+
+    void push(int _val) {
+        Node* p = new Node(_val);
+
+        if (is_empty()) {
+            stack_head = p;
+            return;
+        }
+
+        p->next = stack_head;
+        stack_head = p;
+    }
+
+    void pop() {
+        if (is_empty()) {
+            return;
+        }
+        Node* p = stack_head;
+        stack_head = stack_head->next;
+        delete p;
+    }
+
+};
+```
+
+## <ins> 14. Очередь на списках  </ins>
+
+Реализация очереди на списках должна поддерживать функции:
+- push (добавление)
+- pop (удаление последнего элемента)
+- empty (проверка на пустоту стека)
+
+Код (реализация на односвязном списке):
+```c++
+struct Node{
+    int key;
+    Node* next;
+
+    Node(int _val): key(_val), next(nullptr){}
+};
+
+struct QueueList {
+    Node* queue_head;
+    Node* queue_tail;
+
+    QueueList(): queue_head(nullptr), queue_tail(nullptr){}
+
+    bool is_empty() {
+        return queue_head == nullptr;
+    }
+
+    void push(int _val) {
+        Node* p = new Node(_val);
+
+        if (is_empty()) {
+            queue_tail = queue_head = p;
+            return;
+        }
+
+        queue_tail->next = p;
+        queue_tail = p;
+    }
+
+    void pop() {
+        if (is_empty()) {
+            return;
+        }
+
+        Node* p = queue_head;
+        queue_head = queue_head->next;
+
+        if (queue_head == nullptr) {
+            queue_tail = nullptr;
+        }
+        delete p;
+    }
+};
+```
