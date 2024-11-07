@@ -220,7 +220,8 @@ void QuickSort(int l, int r) {
 - Теперь достаточно пройти по массиву C и для каждого number∈{0,...,k−1}
 в массив A последовательно записать число C[number] раз.
 
-Инвариант: (не ебу)
+Инвариант: после прохода по массиву и " подсчёта" ,
+у нас в массиве корректное количество, сколько каких элементов
 
 Для чисел:
 - Неустойчивая
@@ -564,6 +565,8 @@ struct QueueList {
 Оценка по времени: O(log(n)), т.к. мы постоянно либо увеличиваем L в 2 раза,
 либо уменьшаем R в 2 раза
 
+Виды БинПоиска: вещественный, левый, правый, тернарный, по ответу
+
 ```c++
 bool binsearch(int x, int n) {
     int l = 0, r = n + 1;
@@ -578,4 +581,239 @@ bool binsearch(int x, int n) {
     
     return (l < n && a[l] == x);
 }
+```
+
+## <ins> 16. Бинарные деревья поиска </ins>
+
+Дерево — это иерархическая структура данных. Она состоит из узлов и ребер,
+которые соединяют узлы.
+
+Узел — это объект, в котором есть ключ или значение и указатели на дочерние узлы.
+
+Лист — это узел, у которых нет дочерних узлов.
+
+Корень — это самый верхний узел дерева. Его ещё иногда называют корневым узлом.
+
+Ребро — это указатель, который связывает два узла
+
+Высота узла (h) – это максимальное из всех расстояний от узла до его листьев
+
+Высота дерева (h) – это максимальное из всех расстояний от корня до листьев
+
+Глубина узла – это расстояние от корня до этого узла
+
+Двоичное дерево — древовидная структура данных, в которой у родительских узлов
+может быть не больше двух детей.
+
+Поддеревом узла называется сам узел, вместе со всеми его потомками (детьми,
+детьми детей, детьми детей детей и т.д. до листов)
+
+Двоичное дерево поиска - двоичное дерево, для которого выполняются следующие
+условия (свойства дерева):
+- у всех узлов левого поддерева некоторого узла X значения ключей данных меньше
+(или равны) значения узла X
+- у всех узлов правого поддерева некоторого узла X значения ключей данных больше
+значения узла X
+- оба поддерева (левое и правое) некоторого узла X - двоичные деревья поиска
+
+Операции с двоичным деревом поиска:
+- **<u> Обход дерева поиска </u>**
+
+InOrder (отсортированный вывод)
+```c++
+func inorderTraversal(x : Node):
+    if x != null
+        inorderTraversal(x.left)
+        print x.key
+        inorderTraversal(x.right)
+```
+
+PreOrder (Позволяет восстановить дерево по
+последовательности, выведенной после
+выполнения данной процедуры)
+```c++
+func preorderTraversal(x : Node)
+    if x != null
+        print x.key
+        preorderTraversal(x.left)
+        preorderTraversal(x.right)
+```
+
+PostOrder (Используется для удаления
+дерева)
+```c++
+func postorderTraversal(x : Node)
+    if x != null
+        postorderTraversal(x.left)
+        postorderTraversal(x.right)
+        print x.key
+```
+
+
+- **<u> Поиск элемента </u>**
+
+Реализация:
+```c++
+Node search(x : Node, k : Data):
+  if x == null or k == x.key
+    return x
+  if k < x.key
+    return search(x.left, k)
+  else
+    return search(x.right, k)
+```
+
+- **<u> Поиск минимума и максимума </u>**
+
+Поиск минимума:
+```c++
+Node minimum(x : Node):
+  if x.left == null
+    return x
+  return minimum(x.left)
+```
+
+Поиск максимума:
+```c++
+Node maximum(x : Node):
+  if x.right == null
+    return x
+  return maximum(x.right)
+```
+
+- **<u> Поиск следующего и предыдущего элемента </u>**
+
+Поиск следующего, реализация:
+```c++
+Node next(x : T):
+// root — корень дерева
+    Node current = root, successor = null
+    while current != null
+        if current.key > x
+            successor = current
+            current = current.left
+        else
+            current = current.right
+    return successor
+```
+
+Поиск предыдущего, реализация:
+```c++
+Node prev(x : T):
+    // root — корень дерева
+    Node current = root, successor = null
+    while current != null
+        if current.key >= x
+            current = current.left
+        else
+            successor = current
+            current = current.right
+
+    return successor
+```
+
+- **<u> Вставка элемента </u>**
+
+Реализация без использования информации о родителе:
+```c++
+// x — корень поддерева, z — вставляемый ключ
+Node insert(x : Node, z : T):
+    if x == null
+        return Node(z) // подвесим Node с key = z
+    else if z < x.key
+        x.left = insert(x.left, z)
+    else if z > x.key
+        x.right = insert(x.right, z)
+    return x
+```
+
+Реализация с использованием информации о родителе:
+```c++
+// x — корень поддерева, z — вставляемый элемент
+func insert(x : Node, z : Node):
+    while x != null
+        if z.key > x.key
+            if x.right != null
+                x = x.right
+            else
+                z.parent = x
+                x.right = z
+                break
+        else if z.key < x.key
+            if x.left != null
+                x = x.left
+            else
+                z.parent = x
+                x.left = z
+                break
+```
+
+- **<u> Удаление элемента </u>**
+
+Реализация:
+```c++
+func delete(t : Node, v : Node):
+    p = v.parent
+    if v.left == null and v.right == null // 1 случай, когда удаляем лист
+
+        if p.left == v
+            p.left = null
+        if p.right == v
+            p.right = null
+
+    else if v.left == null or v.right == null // 2 случай, когда у удаляемого узла один ребенок
+
+        if v.left == null
+            if p.left == v
+                p.left = v.right
+
+            else
+                p.right = v.right
+
+            v.right.parent = p
+        else
+            if p.left == v
+
+                p.left = v.left
+
+            else
+
+                p.right = v.left
+
+            v.left.parent = p
+
+    else // 3 случай, когда у удаляемого узла два ребенка
+
+        successor = next(v, t)
+        v.key = successor.key
+        if successor.parent.left == successor
+            successor.parent.left = successor.right
+            if successor.right != null
+
+                successor.right.parent = successor.parent
+
+            else
+                successor.parent.right = successor.right
+                if successor.right != null
+
+                    successor.right.parent = successor.parent
+```
+
+- **<u> Проверка на дерево поиска </u>**
+
+Реализация:
+```c++
+bool isBinarySearchTree(root: Node): // root — корень дерева
+    bool check(v : Node, min: T, max: T): // min и max — мин. и макс. допустимые значения в вершинах
+поддерева
+
+        if v == null
+            return true
+
+        if v.key <= min or max <= v.key
+
+            return false
+
+        return check(v.left, min, v.key) && check(v.right, v.key, max)
+    return check(root, -10^10, 10^10)
 ```
